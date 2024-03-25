@@ -1,0 +1,1242 @@
+
+R version 4.3.3 (2024-02-29 ucrt) -- "Angel Food Cake"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ---
++ title: "Lab 1 Case Study"
+Error in -title : invalid argument to unary operator
+> author: "Your Name Here"
+Error: object 'author' not found
+> date: "`r format(Sys.Date(),'%B %e, %Y')`"
+Error in date:"`r format(Sys.Date(),'%B %e, %Y')`" : NA/NaN argument
+In addition: Warning message:
+NAs introduced by coercion 
+> output:
++   html_document:
++     toc: yes
+Error: object 'output' not found
+>     toc_depth: 4
+Error: object 'toc_depth' not found
+>     toc_float: yes
+Error: object 'toc_float' not found
+>     code_folding: show
+Error: object 'code_folding' not found
+>     code_download: yes
+Error: object 'code_download' not found
+> editor_options:
++   markdown:
++     wrap: 72
+Error: object 'editor_options' not found
+> resource_files:
++   - img/tidymodels.png
+Error: object 'resource_files' not found
+> ---
++ 
++ ```{r setup, include=FALSE}
+Error: attempt to use zero-length variable name
+> knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+> 
+> library(tidymodels)
+── Attaching packages ────────────────────────────────────── tidymodels 1.1.1 ──
+✔ broom        1.0.5      ✔ recipes      1.0.10
+✔ dials        1.2.1      ✔ rsample      1.2.0 
+✔ dplyr        1.1.4      ✔ tibble       3.2.1 
+✔ ggplot2      3.5.0      ✔ tidyr        1.3.1 
+✔ infer        1.0.6      ✔ tune         1.2.0 
+✔ modeldata    1.3.0      ✔ workflows    1.1.4 
+✔ parsnip      1.2.1      ✔ workflowsets 1.1.0 
+✔ purrr        1.0.2      ✔ yardstick    1.3.0 
+── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
+✖ purrr::discard() masks scales::discard()
+✖ dplyr::filter()  masks stats::filter()
+✖ dplyr::lag()     masks stats::lag()
+✖ recipes::step()  masks stats::step()
+• Dig deeper into tidy modeling with R at https://www.tmwr.org
+> library(ggplot2)
+> 
+> students <- read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv")
+Error in read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv") : 
+  could not find function "read_csv"
+> 
+> # Split your data into training and testing sets
+> set.seed(123)
+> data_split <- initial_split(students, prop = 0.7)
+Error: object 'students' not found
+> train_data <- training(data_split)
+Error: object 'data_split' not found
+> test_data <- testing(data_split)
+Error: object 'data_split' not found
+> 
+> # Preprocess your data
+> preproc <- recipe(Target_Variable ~ ., data = train_data) %>%
++   step_center(all_predictors()) %>%
++   step_scale(all_predictors()) %>%
++   prep()
+Error: object 'train_data' not found
+> train_data_processed <- bake(preproc, new_data = train_data)
+Error: object 'preproc' not found
+> test_data_processed <- bake(preproc, new_data = test_data)
+Error: object 'preproc' not found
+> 
+> # Train your models
+> model_rf <- rand_forest() %>%
++   set_engine("ranger") %>%
++   set_mode("regression") %>%
++   fit(Target_Variable ~ ., data = train_data_processed)
+Error: object 'train_data_processed' not found
+> 
+> fitted_model <- fit(model_rf, data = train_data_processed)
+Error: object 'model_rf' not found
+> 
+> fitted_model
+Error: object 'fitted_model' not found
+> 
+> final_fit <- last_fit(model_rf, data = students)
+Error: object 'model_rf' not found
+> 
+> final_fit %>%
++     collect_predictions()
+Error: object 'final_fit' not found
+> 
+> final_fit %>% 
++     collect_predictions() %>% # see test set predictions
++     select(.pred_class, pass) %>% # just to make the output easier to view 
++     mutate(correct = .pred_class == pass)
+Error: object 'final_fit' not found
+> 
+> final_fit %>% 
++     collect_predictions() %>% # see test set predictions
++     select(.pred_class, pass) %>% # just to make the output easier to view 
++     mutate(correct = .pred_class == pass) %>% # create a new variable, correct, telling us when the model was and was not correct
++     tabyl(correct)
+Error in tabyl(., correct) : could not find function "tabyl"
+> library(readr)
+
+Attaching package: ‘readr’
+
+The following object is masked from ‘package:yardstick’:
+
+    spec
+
+The following object is masked from ‘package:scales’:
+
+    col_factor
+
+> 
+> students <- read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv")
+[1mindexing[0m [34moulad-students.csv[0m [===============================] [32m2.15GB/s[0m, eta: [36m 0s[0m                                                                                                                   Rows: 32593 Columns: 15
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (9): code_module, code_presentation, gender, region, highest_education, ...
+dbl (6): id_student, num_of_prev_attempts, studied_credits, module_presentat...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> # Split your data into training and testing sets
+> set.seed(123)
+> data_split <- initial_split(students, prop = 0.7)
+> train_data <- training(data_split)
+> test_data <- testing(data_split)
+> 
+> # Preprocess your data
+> preproc <- recipe(Target_Variable ~ ., data = train_data) %>%
++   step_center(all_predictors()) %>%
++   step_scale(all_predictors()) %>%
++   prep()
+Error in eval(predvars, data, env) : object 'Target_Variable' not found
+> train_data_processed <- bake(preproc, new_data = train_data)
+Error: object 'preproc' not found
+> test_data_processed <- bake(preproc, new_data = test_data)
+Error: object 'preproc' not found
+> 
+> # Train your models
+> model_rf <- rand_forest() %>%
++   set_engine("ranger") %>%
++   set_mode("regression") %>%
++   fit(Target_Variable ~ ., data = train_data_processed)
+Error: object 'train_data_processed' not found
+> 
+> fitted_model <- fit(model_rf, data = train_data_processed)
+Error: object 'model_rf' not found
+> 
+> fitted_model
+Error: object 'fitted_model' not found
+> 
+> final_fit <- last_fit(model_rf, data = students)
+Error: object 'model_rf' not found
+> 
+> final_fit %>%
++     collect_predictions()
+Error: object 'final_fit' not found
+> 
+> final_fit %>% 
++     collect_predictions() %>% # see test set predictions
++     select(.pred_class, pass) %>% # just to make the output easier to view 
++     mutate(correct = .pred_class == pass)
+Error: object 'final_fit' not found
+> 
+> final_fit %>% 
++     collect_predictions() %>% # see test set predictions
++     select(.pred_class, pass) %>% # just to make the output easier to view 
++     mutate(correct = .pred_class == pass) %>% # create a new variable, correct, telling us when the model was and was not correct
++     tabyl(correct)
+Error in tabyl(., correct) : could not find function "tabyl"
+> 
+> 
+
+> preproc <- recipe(~ ., data = train_data) %>%
++   step_center(all_predictors()) %>%
++   step_scale(all_predictors()) %>%
++   prep()
+Error in `step_center()`:
+Caused by error in `prep()`:
+✖ All columns selected for the step should be double or integer.
+• 9 factor variables found: `code_module`, `code_presentation`, `gender`, `region`, `highest_education`, `imd_band`, `age_band`, `disability`, and `final_result`
+Run `rlang::last_trace()` to see where the error occurred.
+> 
+> train_data_processed <- bake(preproc, new_data = train_data)
+Error: object 'preproc' not found
+> test_data_processed <- bake(preproc, new_data = test_data)
+Error: object 'preproc' not found
+> preproc <- recipe(~ ., data = train_data) %>%
++   step_dummy(all_nominal(), -all_outcomes()) %>%
++   step_zv(all_predictors()) %>%  # Remove near-zero variance predictors
++   step_nzv(all_predictors()) %>%  # Remove zero variance predictors
++   step_corr(all_predictors(), threshold = 0.9) %>%  # Remove highly correlated predictors
++   step_center(all_predictors()) %>%
++   step_scale(all_predictors()) %>%
++   prep()
+Warning messages:
+1: ! There are new levels in a factor: `NA`. 
+2: In stats::cor(x, use = use, method = method) :
+  the standard deviation is zero
+3: The correlation matrix has sporadic missing values. Some columns were excluded from the filter. 
+> 
+> train_data_processed <- bake(preproc, new_data = train_data)
+Warning message:
+! There are new levels in a factor: `NA`. 
+> test_data_processed <- bake(preproc, new_data = test_data)
+Warning message:
+! There are new levels in a factor: `NA`. 
+> # Train your models
+> model_rf <- rand_forest() %>%
++   set_engine("ranger") %>%
++   set_mode("regression") %>%
++   fit(Target_Variable ~ ., data = train_data_processed)
+Error in `check_installs()`:
+! This engine requires some package installs: 'ranger'
+Run `rlang::last_trace()` to see where the error occurred.
+> 
+> # Check the fitted model
+> fitted_model <- fit(model_rf, data = train_data_processed)
+Error: object 'model_rf' not found
+> fitted_model
+Error: object 'fitted_model' not found
+> 
+> # Use last_fit to evaluate the model on the entire dataset
+> final_fit <- last_fit(model_rf, data = students)
+Error: object 'model_rf' not found
+> final_fit %>%
++   collect_predictions()
+Error: object 'final_fit' not found
+> 
+> # Evaluate model performance
+> final_fit %>% 
++   collect_predictions() %>% 
++   select(.pred_class, pass) %>% 
++   mutate(correct = .pred_class == pass) %>% 
++   tabyl(correct)
+Error in tabyl(., correct) : could not find function "tabyl"
+> 
+> # Calculate accuracy
+> accuracy <- final_fit %>% 
++   collect_predictions() %>% 
++   select(.pred_class, pass) %>% 
++   mutate(correct = .pred_class == pass) %>% 
++   summarise(accuracy = mean(correct))
+Error: object 'final_fit' not found
+> accuracy
+A class metric | direction: maximize
+> 
+> # Generate predictions on the test set
+> test_predictions <- predict(model_rf, new_data = test_data_processed)
+Error: object 'model_rf' not found
+> 
+> # Visualize predictions vs. actual values
+> ggplot(test_predictions, aes(x = .pred, y = .actual)) +
++   geom_point() +
++   geom_abline(color = "red") +
++   labs(x = "Predicted Value", y = "Actual Value", title = "Predictions vs. Actual Values")
+Error: object 'test_predictions' not found
+> 
+> # Save the final model
+> saveRDS(model_rf, "final_model.RDS")
+Error: object 'model_rf' not found
+> utils:::menuInstallPkgs()
+--- Please select a CRAN mirror for use in this session ---
+also installing the dependency ‘RcppEigen’
+
+trying URL 'https://repo.miserver.it.umich.edu/cran/bin/windows/contrib/4.3/RcppEigen_0.3.4.0.0.zip'
+Content type 'application/octet-stream' length 2611004 bytes (2.5 MB)
+downloaded 2.5 MB
+
+trying URL 'https://repo.miserver.it.umich.edu/cran/bin/windows/contrib/4.3/ranger_0.16.0.zip'
+Content type 'application/octet-stream' length 756771 bytes (739 KB)
+downloaded 739 KB
+
+package ‘RcppEigen’ successfully unpacked and MD5 sums checked
+package ‘ranger’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+        C:\Users\nidha\AppData\Local\Temp\RtmpkzhMo7\downloaded_packages
+> # Train your models
+> model_rf <- rand_forest() %>%
++   set_engine("ranger") %>%
++   set_mode("regression") %>%
++   fit(Target_Variable ~ ., data = train_data_processed)
+Error in eval(predvars, data, env) : object 'Target_Variable' not found
+> 
+> # Check the fitted model
+> fitted_model <- fit(model_rf, data = train_data_processed)
+Error: object 'model_rf' not found
+> fitted_model
+Error: object 'fitted_model' not found
+> 
+> # Use last_fit to evaluate the model on the entire dataset
+> final_fit <- last_fit(model_rf, data = students)
+Error: object 'model_rf' not found
+> final_fit %>%
++   collect_predictions()
+Error: object 'final_fit' not found
+> 
+> # Evaluate model performance
+> final_fit %>% 
++   collect_predictions() %>% 
++   select(.pred_class, pass) %>% 
++   mutate(correct = .pred_class == pass) %>% 
++   tabyl(correct)
+Error in tabyl(., correct) : could not find function "tabyl"
+> 
+> # Calculate accuracy
+> accuracy <- final_fit %>% 
++   collect_predictions() %>% 
++   select(.pred_class, pass) %>% 
++   mutate(correct = .pred_class == pass) %>% 
++   summarise(accuracy = mean(correct))
+Error: object 'final_fit' not found
+> accuracy
+A class metric | direction: maximize
+> 
+> # Generate predictions on the test set
+> test_predictions <- predict(model_rf, new_data = test_data_processed)
+Error: object 'model_rf' not found
+> 
+> # Visualize predictions vs. actual values
+> ggplot(test_predictions, aes(x = .pred, y = .actual)) +
++   geom_point() +
++   geom_abline(color = "red") +
++   labs(x = "Predicted Value", y = "Actual Value", title = "Predictions vs. Actual Values")
+Error: object 'test_predictions' not found
+> 
+> # Save the final model
+> saveRDS(model_rf, "final_model.RDS")
+Error: object 'model_rf' not found
+> model_rf <- rand_forest() %>%
++   set_engine("ranger") %>%
++   set_mode("regression") %>%
++   fit(pass ~ ., data = train_data_processed)
+Error in eval(predvars, data, env) : object 'pass' not found
+> library(readr)
+> 
+> students <- read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv")
+[1mindexing[0m [34moulad-students.csv[0m [========================================================================================================================================================-------------------] [32m2.11GB/s[0m, eta: [36m 0s[0m[1mindexing[0m [34moulad-students.csv[0m [=========================================================================================================================================================================] [32m872.35MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                                                               Rows: 32593 Columns: 15
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (9): code_module, code_presentation, gender, region, highest_education, imd_band, age_band, disability, final_result
+dbl (6): id_student, num_of_prev_attempts, studied_credits, module_presentation_length, date_registration, date_unregistration
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> preproc <- recipe(~ ., data = train_data) %>%
++   step_dummy(all_nominal(), -all_outcomes()) %>%
++   step_zv(all_predictors()) %>%  # Remove near-zero variance predictors
++   step_nzv(all_predictors()) %>%  # Remove zero variance predictors
++   step_corr(all_predictors(), threshold = 0.9) %>%  # Remove highly correlated predictors
++   step_center(all_predictors()) %>%
++   step_scale(all_predictors()) %>%
++   prep()
+Warning messages:
+1: ! There are new levels in a factor: `NA`. 
+2: In stats::cor(x, use = use, method = method) :
+  the standard deviation is zero
+3: The correlation matrix has sporadic missing values. Some columns were excluded from the filter. 
+> 
+> train_data_processed <- bake(preproc, new_data = train_data)
+Warning message:
+! There are new levels in a factor: `NA`. 
+> test_data_processed <- bake(preproc, new_data = test_data)
+Warning message:
+! There are new levels in a factor: `NA`. 
+> # Preprocess your data
+> preproc <- recipe(Target_Variable ~ ., data = train_data) %>%
++   step_center(all_predictors()) %>%
++   step_scale(all_predictors()) %>%
++   prep()
+Error in eval(predvars, data, env) : object 'Target_Variable' not found
+> knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+> 
+> library(tidymodels)
+> library(ggplot2)
+> 
+> students <- read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv")
+[1mindexing[0m [34moulad-students.csv[0m [=========================================================================================================================================----------------------------------] [32m1.01GB/s[0m, eta: [36m 0s[0m[1mindexing[0m [34moulad-students.csv[0m [=========================================================================================================================================================================] [32m681.36MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                                                               Rows: 32593 Columns: 15
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (9): code_module, code_presentation, gender, region, highest_education, imd_band, age_band, disability, final_result
+dbl (6): id_student, num_of_prev_attempts, studied_credits, module_presentation_length, date_registration, date_unregistration
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> # Split your data into training and testing sets
+> set.seed(123)
+> data_split <- initial_split(students, prop = 0.7)
+> train_data <- training(data_split)
+> test_data <- testing(data_split)
+> 
+> # Preprocess your data
+> preproc <- recipe(Target_Variable ~ ., data = train_data) %>%
++   step_center(all_predictors()) %>%
++   step_scale(all_predictors()) %>%
++   prep()
+Error in eval(predvars, data, env) : object 'Target_Variable' not found
+> train_data_processed <- bake(preproc, new_data = train_data)
+Warning message:
+! There are new levels in a factor: `NA`. 
+> test_data_processed <- bake(preproc, new_data = test_data)
+Warning message:
+! There are new levels in a factor: `NA`. 
+> # Preprocess your data
+> preproc <- recipe(Target_Variable ~ ., data = train_data) %>%
++   step_center(all_predictors()) %>%
++   step_scale(all_predictors())
+Error in eval(predvars, data, env) : object 'Target_Variable' not found
+> # Preprocess your data
+> preproc <- recipe(target_variable_name ~ ., data = train_data) %>%
++   step_center(all_predictors()) %>%
++   step_scale(all_predictors())
+Error in eval(predvars, data, env) : 
+  object 'target_variable_name' not found
+> # Train your models
+> model_rf <- rand_forest() %>%
++   set_engine("ranger") %>%
++   set_mode("regression") %>%
++   fit(Target_Variable ~ ., data = train_data_processed)
+Error in eval(predvars, data, env) : object 'Target_Variable' not found
+> 
+> fitted_model <- fit(model_rf, data = train_data_processed)
+Error: object 'model_rf' not found
+> # Preprocess your data
+> preproc <- recipe(your_target_variable_name ~ ., data = your_train_data) %>%
++   step_center(all_predictors()) %>%
++   step_scale(all_predictors())
+Error: object 'your_train_data' not found
+> 
+> # Train your models
+> model_rf <- rand_forest() %>%
++   set_engine("ranger") %>%
++   set_mode("regression") %>%
++   fit(your_target_variable_name ~ ., data = your_train_data_processed)
+Error: object 'your_train_data_processed' not found
+> 
+> fitted_model <- fit(model_rf, data = your_train_data_processed)
+Error: object 'model_rf' not found
+> 
+> library(dplyr)
+> library(caret)
+Error in library(caret) : there is no package called ‘caret’
+> 
+> data <- read.csv("/Users/indiramallela/Dropbox/Northwood/ML/ML course data download weekk1/studentInfo2.csv") # Replace "your_dataset.csv" with the path to your dataset
+Error in file(file, "rt") : cannot open the connection
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file '/Users/indiramallela/Dropbox/Northwood/ML/ML course data download weekk1/studentInfo2.csv': No such file or directory
+> 
+> # Data preprocessing
+> # Convert categorical variables to factors
+> data$code_module <- as.factor(data$code_module)
+Error in data$code_module : object of type 'closure' is not subsettable
+> data$code_presentation <- as.factor(data$code_presentation)
+Error in data$code_presentation : 
+  object of type 'closure' is not subsettable
+> data$gender <- as.factor(data$gender)
+Error in data$gender : object of type 'closure' is not subsettable
+> data$region <- as.factor(data$region)
+Error in data$region : object of type 'closure' is not subsettable
+> data$highest_education <- as.factor(data$highest_education)
+Error in data$highest_education : 
+  object of type 'closure' is not subsettable
+> data$imd_band <- as.factor(data$imd_band)
+Error in data$imd_band : object of type 'closure' is not subsettable
+> data$age_band <- as.factor(data$age_band)
+Error in data$age_band : object of type 'closure' is not subsettable
+> data$num_of_prev_attempts <- as.factor(data$num_of_prev_attempts)
+Error in data$num_of_prev_attempts : 
+  object of type 'closure' is not subsettable
+> data$disability <- as.factor(data$disability)
+Error in data$disability : object of type 'closure' is not subsettable
+> data$final_result <- as.factor(data$final_result)
+Error in data$final_result : object of type 'closure' is not subsettable
+> 
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- createDataPartition(data$final_result, p = 0.8, list = FALSE)
+Error in createDataPartition(data$final_result, p = 0.8, list = FALSE) : 
+  could not find function "createDataPartition"
+> train_data <- data[train_index, ]
+Error: object 'train_index' not found
+> test_data <- data[-train_index, ]
+Error: object 'train_index' not found
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error in train(final_result ~ ., data = train_data, method = "glm", family = "binomial") : 
+  could not find function "train"
+> 
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+Error: object 'model' not found
+> 
+> # Evaluate the model
+> confusionMatrix(predictions, test_data$final_result)
+Error in confusionMatrix(predictions, test_data$final_result) : 
+  could not find function "confusionMatrix"
+> library(dplyr)
+> 
+> library(dplyr)
+> library(caret)
+Error in library(caret) : there is no package called ‘caret’
+> 
+> data <- read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv")# Replace "your_dataset.csv" with the path to your dataset
+[1mindexing[0m [34moulad-students.csv[0m [=============================================================================================================================================================------------] [32m938.76MB/s[0m, eta: [36m 0s[0m[1mindexing[0m [34moulad-students.csv[0m [=========================================================================================================================================================================] [32m665.14MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                                                               Rows: 32593 Columns: 15
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (9): code_module, code_presentation, gender, region, highest_education, imd_band, age_band, disability, final_result
+dbl (6): id_student, num_of_prev_attempts, studied_credits, module_presentation_length, date_registration, date_unregistration
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> 
+> # Data preprocessing
+> # Convert categorical variables to factors
+> data$code_module <- as.factor(data$code_module)
+> data$code_presentation <- as.factor(data$code_presentation)
+> data$gender <- as.factor(data$gender)
+> data$region <- as.factor(data$region)
+> data$highest_education <- as.factor(data$highest_education)
+> data$imd_band <- as.factor(data$imd_band)
+> data$age_band <- as.factor(data$age_band)
+> data$num_of_prev_attempts <- as.factor(data$num_of_prev_attempts)
+> data$disability <- as.factor(data$disability)
+> data$final_result <- as.factor(data$final_result)
+> 
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- createDataPartition(data$final_result, p = 0.8, list = FALSE)
+Error in createDataPartition(data$final_result, p = 0.8, list = FALSE) : 
+  could not find function "createDataPartition"
+> train_data <- data[train_index, ]
+Error: object 'train_index' not found
+> test_data <- data[-train_index, ]
+Error: object 'train_index' not found
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error in train(final_result ~ ., data = train_data, method = "glm", family = "binomial") : 
+  could not find function "train"
+> 
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+Error: object 'model' not found
+> 
+> # Evaluate the model
+> confusionMatrix(predictions, test_data$final_result)
+Error in confusionMatrix(predictions, test_data$final_result) : 
+  could not find function "confusionMatrix"
+> # Load necessary libraries
+> library(dplyr)
+> library(caret)
+Error in library(caret) : there is no package called ‘caret’
+> utils:::menuInstallPkgs()
+also installing the dependencies ‘proxy’, ‘e1071’, ‘ModelMetrics’, ‘plyr’, ‘pROC’, ‘reshape2’
+
+trying URL 'https://repo.miserver.it.umich.edu/cran/bin/windows/contrib/4.3/proxy_0.4-27.zip'
+Content type 'application/octet-stream' length 180080 bytes (175 KB)
+downloaded 175 KB
+
+trying URL 'https://repo.miserver.it.umich.edu/cran/bin/windows/contrib/4.3/e1071_1.7-14.zip'
+Content type 'application/octet-stream' length 665011 bytes (649 KB)
+downloaded 649 KB
+
+trying URL 'https://repo.miserver.it.umich.edu/cran/bin/windows/contrib/4.3/ModelMetrics_1.2.2.2.zip'
+Content type 'application/octet-stream' length 484424 bytes (473 KB)
+downloaded 473 KB
+
+trying URL 'https://repo.miserver.it.umich.edu/cran/bin/windows/contrib/4.3/plyr_1.8.9.zip'
+Content type 'application/octet-stream' length 1163293 bytes (1.1 MB)
+downloaded 1.1 MB
+
+trying URL 'https://repo.miserver.it.umich.edu/cran/bin/windows/contrib/4.3/pROC_1.18.5.zip'
+Content type 'application/octet-stream' length 1169934 bytes (1.1 MB)
+downloaded 1.1 MB
+
+trying URL 'https://repo.miserver.it.umich.edu/cran/bin/windows/contrib/4.3/reshape2_1.4.4.zip'
+Content type 'application/octet-stream' length 455782 bytes (445 KB)
+downloaded 445 KB
+
+trying URL 'https://repo.miserver.it.umich.edu/cran/bin/windows/contrib/4.3/caret_6.0-94.zip'
+Content type 'application/octet-stream' length 3577406 bytes (3.4 MB)
+downloaded 3.4 MB
+
+package ‘proxy’ successfully unpacked and MD5 sums checked
+package ‘e1071’ successfully unpacked and MD5 sums checked
+package ‘ModelMetrics’ successfully unpacked and MD5 sums checked
+package ‘plyr’ successfully unpacked and MD5 sums checked
+package ‘pROC’ successfully unpacked and MD5 sums checked
+package ‘reshape2’ successfully unpacked and MD5 sums checked
+package ‘caret’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+        C:\Users\nidha\AppData\Local\Temp\RtmpkzhMo7\downloaded_packages
+> # Load necessary libraries
+> library(dplyr)
+> library(caret)
+Loading required package: lattice
+
+Attaching package: ‘caret’
+
+The following objects are masked from ‘package:yardstick’:
+
+    precision, recall, sensitivity, specificity
+
+The following object is masked from ‘package:purrr’:
+
+    lift
+
+> # Load necessary libraries
+> library(dplyr)
+> library(caret)
+> # Load the dataset
+> data <- read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv") # Replace "C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv" with the path to your dataset
+[1mindexing[0m [34moulad-students.csv[0m [===========================================================================================================================================================================] [32m2.15GB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                                                               Rows: 32593 Columns: 15
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (9): code_module, code_presentation, gender, region, highest_education, imd_band, age_band, disability, final_result
+dbl (6): id_student, num_of_prev_attempts, studied_credits, module_presentation_length, date_registration, date_unregistration
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> # Data preprocessing
+> # Convert categorical variables to factors
+> data$code_module <- as.factor(data$code_module)
+> data$code_presentation <- as.factor(data$code_presentation)
+> data$gender <- as.factor(data$gender)
+> data$region <- as.factor(data$region)
+> data$highest_education <- as.factor(data$highest_education)
+> data$imd_band <- as.factor(data$imd_band)
+> data$age_band <- as.factor(data$age_band)
+> data$num_of_prev_attempts <- as.factor(data$num_of_prev_attempts)
+> data$disability <- as.factor(data$disability)
+> data$final_result <- as.factor(data$final_result)
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- createDataPartition(data$final_result, p = 0.8, list = FALSE)
+> train_data <- data[train_index, ]
+> test_data <- data[-train_index, ]
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error in na.fail.default(list(final_result = c(3L, 3L, 4L, 3L, 3L, 3L,  : 
+  missing values in object
+> # Remove rows with missing values
+> train_data <- na.omit(train_data)
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error: One or more factor levels in the outcome has no data: 'Distinction', 'Pass'
+> # Check factor levels of final_result in the dataset
+> levels_data <- levels(data$final_result)
+> 
+> # Check factor levels of final_result in the outcome variable
+> levels_outcome <- levels(train_data$final_result)
+> 
+> # Identify missing levels
+> missing_levels <- setdiff(levels_data, levels_outcome)
+> 
+> # Add missing levels to the outcome variable in the training data
+> train_data$final_result <- factor(train_data$final_result, levels = levels_data)
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error: One or more factor levels in the outcome has no data: 'Distinction', 'Pass'
+> # Remove levels with no data from the outcome variable in the training data
+> train_data$final_result <- droplevels(train_data$final_result)
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+There were 50 or more warnings (use warnings() to see the first 50)
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+> 
+> # Load necessary libraries
+> library(dplyr)
+> library(caret)
+> # Load the dataset
+> data <- read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv") # Replace "C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv" with the path to your dataset
+[1mindexing[0m [34moulad-students.csv[0m [===========================----------------------------------------------------------------------------------------------------------------------------------------------] [32m193.22MB/s[0m, eta: [36m 0s[0m[1mindexing[0m [34moulad-students.csv[0m [=========================================================================================================================================================================] [32m224.03MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                                                               Rows: 32593 Columns: 15
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (9): code_module, code_presentation, gender, region, highest_education, imd_band, age_band, disability, final_result
+dbl (6): id_student, num_of_prev_attempts, studied_credits, module_presentation_length, date_registration, date_unregistration
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> # Data preprocessing
+> # Convert categorical variables to factors
+> data$code_module <- as.factor(data$code_module)
+> data$code_presentation <- as.factor(data$code_presentation)
+> data$gender <- as.factor(data$gender)
+> data$region <- as.factor(data$region)
+> data$highest_education <- as.factor(data$highest_education)
+> data$imd_band <- as.factor(data$imd_band)
+> data$age_band <- as.factor(data$age_band)
+> data$num_of_prev_attempts <- as.factor(data$num_of_prev_attempts)
+> data$disability <- as.factor(data$disability)
+> data$final_result <- as.factor(data$final_result)
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- createDataPartition(data$final_result, p = 0.8, list = FALSE)
+> train_data <- data[train_index, ]
+> test_data <- data[-train_index, ]
+> # Remove levels with no data from the outcome variable in the training data
+> train_data$final_result <- droplevels(train_data$final_result)
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error in na.fail.default(list(final_result = c(3L, 3L, 4L, 3L, 3L, 3L,  : 
+  missing values in object
+> # Check factor levels of final_result in the dataset
+> levels_data <- levels(data$final_result)
+> 
+> # Check factor levels of final_result in the outcome variable
+> levels_outcome <- levels(train_data$final_result)
+> 
+> # Identify missing levels
+> missing_levels <- setdiff(levels_data, levels_outcome)
+> 
+> # Add missing levels to the outcome variable in the training data
+> train_data$final_result <- factor(train_data$final_result, levels = levels_data)
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error in na.fail.default(list(final_result = c(3L, 3L, 4L, 3L, 3L, 3L,  : 
+  missing values in object
+> # Remove rows with missing values
+> train_data <- train_data[complete.cases(train_data), ]
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error: One or more factor levels in the outcome has no data: 'Distinction', 'Pass'
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+> 
+> 
+> 
+> 
+> library(dplyr)
+> library(caret)
+> 
+> data <- read.csv("/Users/indiramallela/Dropbox/Northwood/ML/ML course data download weekk1/studentInfo2.csv") # Replace "your_dataset.csv" with the path to your dataset
+Error in file(file, "rt") : cannot open the connection
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file '/Users/indiramallela/Dropbox/Northwood/ML/ML course data download weekk1/studentInfo2.csv': No such file or directory
+> 
+> # Data preprocessing
+> # Convert categorical variables to factors
+> data$code_module <- as.factor(data$code_module)
+> data$code_presentation <- as.factor(data$code_presentation)
+> data$gender <- as.factor(data$gender)
+> data$region <- as.factor(data$region)
+> data$highest_education <- as.factor(data$highest_education)
+> data$imd_band <- as.factor(data$imd_band)
+> data$age_band <- as.factor(data$age_band)
+> data$num_of_prev_attempts <- as.factor(data$num_of_prev_attempts)
+> data$disability <- as.factor(data$disability)
+> data$final_result <- as.factor(data$final_result)
+> 
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- createDataPartition(data$final_result, p = 0.8, list = FALSE)
+> train_data <- data[train_index, ]
+> test_data <- data[-train_index, ]
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error in na.fail.default(list(final_result = c(3L, 3L, 4L, 3L, 3L, 3L,  : 
+  missing values in object
+> 
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+> 
+> # Evaluate the model
+> confusionMatrix(predictions, test_data$final_result)
+Error in table(data, reference, dnn = dnn, ...) : 
+  all arguments must have the same length
+In addition: Warning message:
+In confusionMatrix.default(predictions, test_data$final_result) :
+  Levels are not in the same order for reference and data. Refactoring data to match.
+> 
+> library(dplyr)
+> library(caret)
+> 
+> data <- read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv") # Replace "your_dataset.csv" with the path to your dataset
+[1mindexing[0m [34moulad-students.csv[0m [===========================================================================================================================================================================] [32m2.15GB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                                                               Rows: 32593 Columns: 15
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (9): code_module, code_presentation, gender, region, highest_education, imd_band, age_band, disability, final_result
+dbl (6): id_student, num_of_prev_attempts, studied_credits, module_presentation_length, date_registration, date_unregistration
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> 
+> # Data preprocessing
+> # Convert categorical variables to factors
+> data$code_module <- as.factor(data$code_module)
+> data$code_presentation <- as.factor(data$code_presentation)
+> data$gender <- as.factor(data$gender)
+> data$region <- as.factor(data$region)
+> data$highest_education <- as.factor(data$highest_education)
+> data$imd_band <- as.factor(data$imd_band)
+> data$age_band <- as.factor(data$age_band)
+> data$num_of_prev_attempts <- as.factor(data$num_of_prev_attempts)
+> data$disability <- as.factor(data$disability)
+> data$final_result <- as.factor(data$final_result)
+> 
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- createDataPartition(data$final_result, p = 0.8, list = FALSE)
+> train_data <- data[train_index, ]
+> test_data <- data[-train_index, ]
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error in na.fail.default(list(final_result = c(3L, 3L, 4L, 3L, 3L, 3L,  : 
+  missing values in object
+> 
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+> 
+> # Evaluate the model
+> confusionMatrix(predictions, test_data$final_result)
+Error in table(data, reference, dnn = dnn, ...) : 
+  all arguments must have the same length
+In addition: Warning message:
+In confusionMatrix.default(predictions, test_data$final_result) :
+  Levels are not in the same order for reference and data. Refactoring data to match.
+> library(dplyr)
+> library(caret)
+> 
+> data <- read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv") # Replace "your_dataset.csv" with the path to your dataset
+[1mindexing[0m [34moulad-students.csv[0m [===========================================================================================================================================================================] [32m2.15GB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                                                               Rows: 32593 Columns: 15
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (9): code_module, code_presentation, gender, region, highest_education, imd_band, age_band, disability, final_result
+dbl (6): id_student, num_of_prev_attempts, studied_credits, module_presentation_length, date_registration, date_unregistration
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> 
+> # Data preprocessing
+> # Convert categorical variables to factors
+> data$code_module <- as.factor(data$code_module)
+> data$code_presentation <- as.factor(data$code_presentation)
+> data$gender <- as.factor(data$gender)
+> data$region <- as.factor(data$region)
+> data$highest_education <- as.factor(data$highest_education)
+> data$imd_band <- as.factor(data$imd_band)
+> data$age_band <- as.factor(data$age_band)
+> data$num_of_prev_attempts <- as.factor(data$num_of_prev_attempts)
+> data$disability <- as.factor(data$disability)
+> data$final_result <- as.factor(data$final_result)
+> 
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- caret::createDataPartition(data$final_result, p = 0.8, list = FALSE) # Ensure the createDataPartition function is called from the caret package
+> train_data <- data[train_index, ]
+> test_data <- data[-train_index, ]
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error in na.fail.default(list(final_result = c(3L, 3L, 4L, 3L, 3L, 3L,  : 
+  missing values in object
+> 
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+> 
+> # Evaluate the model
+> confusionMatrix(predictions, test_data$final_result)
+Error in table(data, reference, dnn = dnn, ...) : 
+  all arguments must have the same length
+In addition: Warning message:
+In confusionMatrix.default(predictions, test_data$final_result) :
+  Levels are not in the same order for reference and data. Refactoring data to match.
+> library(dplyr)
+> library(caret)
+> 
+> # Read the dataset
+> data <- read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv")
+[1mindexing[0m [34moulad-students.csv[0m [===========================================================================================================================================================================] [32m2.15GB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                                                               Rows: 32593 Columns: 15
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (9): code_module, code_presentation, gender, region, highest_education, imd_band, age_band, disability, final_result
+dbl (6): id_student, num_of_prev_attempts, studied_credits, module_presentation_length, date_registration, date_unregistration
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> 
+> # Data preprocessing
+> # Convert categorical variables to factors
+> data$code_module <- as.factor(data$code_module)
+> data$code_presentation <- as.factor(data$code_presentation)
+> data$gender <- as.factor(data$gender)
+> data$region <- as.factor(data$region)
+> data$highest_education <- as.factor(data$highest_education)
+> data$imd_band <- as.factor(data$imd_band)
+> data$age_band <- as.factor(data$age_band)
+> data$num_of_prev_attempts <- as.factor(data$num_of_prev_attempts)
+> data$disability <- as.factor(data$disability)
+> data$final_result <- as.factor(data$final_result)
+> 
+> # Drop rows with missing values
+> data <- na.omit(data)
+> 
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- caret::createDataPartition(data$final_result, p = 0.8, list = FALSE) 
+Warning message:
+In caret::createDataPartition(data$final_result, p = 0.8, list = FALSE) :
+  Some classes have no records ( Distinction, Pass ) and these will be ignored
+> train_data <- data[train_index, ]
+> test_data <- data[-train_index, ]
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error: One or more factor levels in the outcome has no data: 'Distinction', 'Pass'
+> 
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+> 
+> # Ensure factor levels are consistent
+> levels(predictions) <- levels(test_data$final_result)
+> 
+> # Evaluate the model
+> confusionMatrix(predictions, test_data$final_result)
+Confusion Matrix and Statistics
+
+             Reference
+Prediction    Distinction Fail Pass Withdrawn
+  Distinction           0    0    0         0
+  Fail                  0    1    0      1957
+  Pass                  0    0    0         0
+  Withdrawn             0    0    0         0
+
+Overall Statistics
+                                     
+               Accuracy : 5e-04      
+                 95% CI : (0, 0.0028)
+    No Information Rate : 0.9995     
+    P-Value [Acc > NIR] : 1          
+                                     
+                  Kappa : 0          
+                                     
+ Mcnemar's Test P-Value : NA         
+
+Statistics by Class:
+
+                     Class: Distinction Class: Fail Class: Pass Class: Withdrawn
+Sensitivity                          NA   1.0000000          NA        0.0000000
+Specificity                           1   0.0000000           1        1.0000000
+Pos Pred Value                       NA   0.0005107          NA              NaN
+Neg Pred Value                       NA         NaN          NA        0.0005107
+Prevalence                            0   0.0005107           0        0.9994893
+Detection Rate                        0   0.0005107           0        0.0000000
+Detection Prevalence                  0   1.0000000           0        0.0000000
+Balanced Accuracy                    NA   0.5000000          NA        0.5000000
+> library(dplyr)
+> library(caret)
+> 
+> # Read the dataset
+> data <- read_csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv")
+[1mindexing[0m [34moulad-students.csv[0m [=====================================================================================================================================================--------------------] [32m713.21MB/s[0m, eta: [36m 0s[0m[1mindexing[0m [34moulad-students.csv[0m [=========================================================================================================================================================================] [32m323.90MB/s[0m, eta: [36m 0s[0m                                                                                                                                                                                                                                                               Rows: 32593 Columns: 15
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (9): code_module, code_presentation, gender, region, highest_education, imd_band, age_band, disability, final_result
+dbl (6): id_student, num_of_prev_attempts, studied_credits, module_presentation_length, date_registration, date_unregistration
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> 
+> # Data preprocessing
+> # Convert categorical variables to factors
+> data$code_module <- as.factor(data$code_module)
+> data$code_presentation <- as.factor(data$code_presentation)
+> data$gender <- as.factor(data$gender)
+> data$region <- as.factor(data$region)
+> data$highest_education <- as.factor(data$highest_education)
+> data$imd_band <- as.factor(data$imd_band)
+> data$age_band <- as.factor(data$age_band)
+> data$num_of_prev_attempts <- as.factor(data$num_of_prev_attempts)
+> data$disability <- as.factor(data$disability)
+> data$final_result <- as.factor(data$final_result)
+> 
+> # Drop rows with missing values
+> data <- na.omit(data)
+> 
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- caret::createDataPartition(data$final_result, p = 0.8, list = FALSE) 
+Warning message:
+In caret::createDataPartition(data$final_result, p = 0.8, list = FALSE) :
+  Some classes have no records ( Distinction, Pass ) and these will be ignored
+> train_data <- data[train_index, ]
+> test_data <- data[-train_index, ]
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error: One or more factor levels in the outcome has no data: 'Distinction', 'Pass'
+> 
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+> 
+> # Ensure factor levels are consistent
+> levels(predictions) <- levels(test_data$final_result)
+> 
+> # Evaluate the model
+> confusionMatrix(predictions, test_data$final_result)
+Confusion Matrix and Statistics
+
+             Reference
+Prediction    Distinction Fail Pass Withdrawn
+  Distinction           0    0    0         0
+  Fail                  0    1    0      1957
+  Pass                  0    0    0         0
+  Withdrawn             0    0    0         0
+
+Overall Statistics
+                                     
+               Accuracy : 5e-04      
+                 95% CI : (0, 0.0028)
+    No Information Rate : 0.9995     
+    P-Value [Acc > NIR] : 1          
+                                     
+                  Kappa : 0          
+                                     
+ Mcnemar's Test P-Value : NA         
+
+Statistics by Class:
+
+                     Class: Distinction Class: Fail Class: Pass Class: Withdrawn
+Sensitivity                          NA   1.0000000          NA        0.0000000
+Specificity                           1   0.0000000           1        1.0000000
+Pos Pred Value                       NA   0.0005107          NA              NaN
+Neg Pred Value                       NA         NaN          NA        0.0005107
+Prevalence                            0   0.0005107           0        0.9994893
+Detection Rate                        0   0.0005107           0        0.0000000
+Detection Prevalence                  0   1.0000000           0        0.0000000
+Balanced Accuracy                    NA   0.5000000          NA        0.5000000
+> library(dplyr)
+> library(caret)
+> 
+> data <- read.csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv") # Replace "your_dataset.csv" with the path to your dataset
+> 
+> # Data preprocessing
+> # Convert categorical variables to factors
+> data$code_module <- as.factor(data$code_module)
+> data$code_presentation <- as.factor(data$code_presentation)
+> data$gender <- as.factor(data$gender)
+> data$region <- as.factor(data$region)
+> data$highest_education <- as.factor(data$highest_education)
+> data$imd_band <- as.factor(data$imd_band)
+> data$age_band <- as.factor(data$age_band)
+> data$num_of_prev_attempts <- as.factor(data$num_of_prev_attempts)
+> data$disability <- as.factor(data$disability)
+> data$final_result <- as.factor(data$final_result)
+> 
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- createDataPartition(data$final_result, p = 0.8, list = FALSE)
+> train_data <- data[train_index, ]
+> test_data <- data[-train_index, ]
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error in na.fail.default(list(final_result = c(3L, 3L, 4L, 3L, 3L, 3L,  : 
+  missing values in object
+> 
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+> 
+> # Evaluate the model
+> confusionMatrix(predictions, test_data$final_result)
+Error in table(data, reference, dnn = dnn, ...) : 
+  all arguments must have the same length
+In addition: Warning message:
+In confusionMatrix.default(predictions, test_data$final_result) :
+  Levels are not in the same order for reference and data. Refactoring data to match.
+> library(dplyr)
+> library(caret)
+> 
+> data <- read.csv("C:/Users/nidha/Downloads/lab1 ML/oulad-students.csv") # Replace "your_dataset.csv" with the path to your dataset
+> 
+> # Data preprocessing
+> # Convert categorical variables to factors
+> data$code_module <- as.factor(data$code_module)
+> data$code_presentation <- as.factor(data$code_presentation)
+> data$gender <- as.factor(data$gender)
+> data$region <- as.factor(data$region)
+> data$highest_education <- as.factor(data$highest_education)
+> data$imd_band <- as.factor(data$imd_band)
+> data$age_band <- as.factor(data$age_band)
+> data$num_of_prev_attempts <- as.factor(data$num_of_prev_attempts)
+> data$disability <- as.factor(data$disability)
+> data$final_result <- as.factor(data$final_result)
+> 
+> # Handle missing values
+> data <- na.omit(data)
+> 
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- createDataPartition(data$final_result, p = 0.8, list = FALSE)
+Warning message:
+In createDataPartition(data$final_result, p = 0.8, list = FALSE) :
+  Some classes have no records ( Distinction, Pass ) and these will be ignored
+> train_data <- data[train_index, ]
+> test_data <- data[-train_index, ]
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error: One or more factor levels in the outcome has no data: 'Distinction', 'Pass'
+> 
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+> 
+> # Evaluate the model
+> confusionMatrix(predictions, test_data$final_result)
+Confusion Matrix and Statistics
+
+             Reference
+Prediction    Distinction Fail Pass Withdrawn
+  Distinction           0    0    0         0
+  Fail                  0    0    0         0
+  Pass                  0    0    0         0
+  Withdrawn             0    1    0      1957
+
+Overall Statistics
+                                     
+               Accuracy : 0.9995     
+                 95% CI : (0.9972, 1)
+    No Information Rate : 0.9995     
+    P-Value [Acc > NIR] : 0.7358     
+                                     
+                  Kappa : 0          
+                                     
+ Mcnemar's Test P-Value : NA         
+
+Statistics by Class:
+
+                     Class: Distinction Class: Fail Class: Pass Class: Withdrawn
+Sensitivity                          NA   0.0000000          NA           1.0000
+Specificity                           1   1.0000000           1           0.0000
+Pos Pred Value                       NA         NaN          NA           0.9995
+Neg Pred Value                       NA   0.9994893          NA              NaN
+Prevalence                            0   0.0005107           0           0.9995
+Detection Rate                        0   0.0000000           0           0.9995
+Detection Prevalence                  0   0.0000000           0           1.0000
+Balanced Accuracy                    NA   0.5000000          NA           0.5000
+Warning message:
+In confusionMatrix.default(predictions, test_data$final_result) :
+  Levels are not in the same order for reference and data. Refactoring data to match.
+> # Handle missing values
+> data <- na.omit(data)
+> 
+> # Split the data into training and testing sets (80% training, 20% testing)
+> set.seed(123) # For reproducibility
+> train_index <- createDataPartition(data$final_result, p = 0.8, list = FALSE)
+Warning message:
+In createDataPartition(data$final_result, p = 0.8, list = FALSE) :
+  Some classes have no records ( Distinction, Pass ) and these will be ignored
+> train_data <- data[train_index, ]
+> test_data <- data[-train_index, ]
+> 
+> # Check for missing classes in the final_result column
+> missing_classes <- setdiff(levels(train_data$final_result), levels(test_data$final_result))
+> if (length(missing_classes) > 0) {
++   message("Missing classes in test data: ", paste(missing_classes, collapse = ", "))
++   test_data$final_result <- factor(test_data$final_result, levels = levels(train_data$final_result))
++ }
+> 
+> # Train the classification model (logistic regression)
+> model <- train(final_result ~ ., data = train_data, method = "glm", family = "binomial")
+Error: One or more factor levels in the outcome has no data: 'Distinction', 'Pass'
+> 
+> # Make predictions on the test data
+> predictions <- predict(model, newdata = test_data)
+> 
+> # Evaluate the model
+> confusionMatrix(predictions, test_data$final_result)
+Confusion Matrix and Statistics
+
+             Reference
+Prediction    Distinction Fail Pass Withdrawn
+  Distinction           0    0    0         0
+  Fail                  0    0    0         0
+  Pass                  0    0    0         0
+  Withdrawn             0    1    0      1957
+
+Overall Statistics
+                                     
+               Accuracy : 0.9995     
+                 95% CI : (0.9972, 1)
+    No Information Rate : 0.9995     
+    P-Value [Acc > NIR] : 0.7358     
+                                     
+                  Kappa : 0          
+                                     
+ Mcnemar's Test P-Value : NA         
+
+Statistics by Class:
+
+                     Class: Distinction Class: Fail Class: Pass Class: Withdrawn
+Sensitivity                          NA   0.0000000          NA           1.0000
+Specificity                           1   1.0000000           1           0.0000
+Pos Pred Value                       NA         NaN          NA           0.9995
+Neg Pred Value                       NA   0.9994893          NA              NaN
+Prevalence                            0   0.0005107           0           0.9995
+Detection Rate                        0   0.0000000           0           0.9995
+Detection Prevalence                  0   0.0000000           0           1.0000
+Balanced Accuracy                    NA   0.5000000          NA           0.5000
+Warning message:
+In confusionMatrix.default(predictions, test_data$final_result) :
+  Levels are not in the same order for reference and data. Refactoring data to match.
+> 
