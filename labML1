@@ -4,9 +4,9 @@ library(ggplot2)
 # Make sure the file path is correct and the file is in CSV format
 your_data <- read.csv("C:/Users/tejat/OneDrive/Desktop/pit and balcony project/oulad-students.csv")
 
-# Explore the structure of your dataset
+# looking into the structure of your dataset
 str(your_data)
-# Check for NAs in the variables
+# NAs in the variables taken
 sum(is.na(your_data$module_presentation_length))
 
 sum(is.na(your_data$studied_credits))
